@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'cubit/favorit_cubit.dart';
 import 'cubit/pengajuan_cubit.dart';
+import 'cubit/theme_cubit.dart';
 import 'navigation/app_routes.dart';
+import 'theme/app_theme.dart';
 
 void main() {
   runApp(
@@ -14,6 +16,9 @@ void main() {
         ),
         BlocProvider(
           create: (_) => PengajuanCubit(),
+        ),
+        BlocProvider(
+          create: (_) => ThemeCubit(),
         ),
       ],
       child: const NusantaraCerdasApp(),
@@ -26,19 +31,20 @@ class NusantaraCerdasApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Nusantara Cerdas',
-      initialRoute: AppRoutes.beranda,
-      routes: AppRoutes.daftarRoute(),
-      onGenerateRoute: AppRoutes.bentukRoute,
-      onUnknownRoute: AppRoutes.routeTidakDikenal,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-        ),
-        useMaterial3: true,
-      ),
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Nusantara Cerdas',
+          initialRoute: AppRoutes.beranda,
+          routes: AppRoutes.daftarRoute(),
+          onGenerateRoute: AppRoutes.bentukRoute,
+          onUnknownRoute: AppRoutes.routeTidakDikenal,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeMode,
+        );
+      },
     );
   }
 }

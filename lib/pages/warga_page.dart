@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/favorit_cubit.dart';
 import '../navigation/app_routes.dart';
+import '../cubit/theme_cubit.dart';
 
 class WargaPage extends StatelessWidget {
   const WargaPage({super.key});
@@ -82,6 +83,64 @@ class WargaPage extends StatelessWidget {
               ],
             ),
           ),
+
+
+          // =========================
+          // Pengaturan Tema
+          // =========================
+          BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              final temaGelap = themeMode == ThemeMode.dark;
+
+              return Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16),
+                  leading: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primaryContainer,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      temaGelap
+                          ? Icons.dark_mode
+                          : Icons.light_mode,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onPrimaryContainer,
+                    ),
+                  ),
+                  title: const Text(
+                    'Pengaturan Tema',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    temaGelap
+                        ? 'Mode gelap sedang aktif'
+                        : themeMode == ThemeMode.system
+                            ? 'Mengikuti tema perangkat'
+                            : 'Mode terang sedang aktif',
+                  ),
+                  trailing: Switch(
+                    value: temaGelap,
+                    onChanged: (_) {
+                      context.read<ThemeCubit>().toggle();
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+
 
           const SizedBox(height: 30),
 
